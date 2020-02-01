@@ -42,7 +42,7 @@ changeColor = e => {
             row.push(tableRow[i].children[column]);
             if (currentPlayer === 1) {
                 row[0].style.backgroundColor = 'red';
-                if (horizontalCheck() || verticalCheck() || diagonalRightCheck() || diagonalLeftCheck){
+                if (horizontalCheck() || verticalCheck() || diagonalRightCheck() || diagonalLeftCheck()){
                     playerTurn.textContent = `${player1} WINS!!`;
                     playerTurn.style.color = player1Color;
                     return alert(`${player1} WINS!!`);
@@ -55,7 +55,7 @@ changeColor = e => {
                 }
             } else {
                 row[0].style.backgroundColor = 'yellow';
-                if (horizontalCheck() || verticalCheck() || diagonalCheck() || diagonalCheck2()){
+                if (horizontalCheck() || verticalCheck() || diagonalRightCheck() || diagonalLeftCheck()){
                     playerTurn.textContent = `${player2} WINS!!`;
                     playerTurn.style.color = player2Color;
                     return alert(`${player2} WINS!!`);
