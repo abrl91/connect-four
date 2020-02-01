@@ -32,23 +32,25 @@ for (let cell = 0; cell < tableCell.length; cell++){
 
 changeColor = e => {
     // Get clicked column index
+    console.log(e.target.cellIndex);
     let column = e.target.cellIndex;
     let row = [];
 
-    for (i = 5; i > -1; i--) {
+    // check the bottom row first
+    for (let i = 5; i > -1; i--) {
         if (tableRow[i].children[column].style.backgroundColor === 'white'){
             row.push(tableRow[i].children[column]);
-            if (currentPlayer === 1){
+            if (currentPlayer === 1) {
                 row[0].style.backgroundColor = 'red';
-                if (horizontalCheck() || verticalCheck() || diagonalCheck() || diagonalCheck2()){
+                if (horizontalCheck() || verticalCheck() || diagonalRightCheck() || diagonalLeftCheck){
                     playerTurn.textContent = `${player1} WINS!!`;
                     playerTurn.style.color = player1Color;
                     return alert(`${player1} WINS!!`);
-                }else if (drawCheck()){
+                } else if (drawCheck()) {
                     playerTurn.textContent = 'DRAW!';
                     return alert('DRAW!');
-                }else{
-                    playerTurn.textContent = `${player2}'s turn`
+                } else {
+                    playerTurn.textContent = `${player2}'s turn`;
                     return currentPlayer = 2;
                 }
             } else {
@@ -57,10 +59,10 @@ changeColor = e => {
                     playerTurn.textContent = `${player2} WINS!!`;
                     playerTurn.style.color = player2Color;
                     return alert(`${player2} WINS!!`);
-                }else if (drawCheck()){
+                } else if (drawCheck()) {
                     playerTurn.textContent = 'DRAW!';
                     return alert('DRAW!');
-                }else{
+                } else{
                     playerTurn.textContent = `${player1}'s turn`;
                     return currentPlayer = 1;
                 }
@@ -72,7 +74,7 @@ changeColor = e => {
 
 Array.prototype.forEach.call(tableCell, (cell) => {
     cell.addEventListener('click', changeColor);
-    // Set all slots to white for new game.
+    // set all slots to white for new game.
     cell.style.backgroundColor = 'white';
 });
 
@@ -81,8 +83,9 @@ colorMatchCheck = (one, two, three, four) => {
 };
 
 horizontalCheck = () => {
-    for (let row = 0; row < tableRow.length; row++){
-        for (let col =0; col < 4; col++){
+    for (let row = 0; row < tableRow.length; row++) {
+        // four possible ways to win horizontally in a row
+        for (let col = 0; col < 4; col++){
             if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor,tableRow[row].children[col+1].style.backgroundColor,
                 tableRow[row].children[col+2].style.backgroundColor, tableRow[row].children[col+3].style.backgroundColor)){
                 return true;
@@ -92,7 +95,9 @@ horizontalCheck = () => {
 };
 
 verticalCheck = () => {
-    for (let col = 0; col < 7; col++){
+    // 7 columns
+    for (let col = 0; col < 7; col++) {
+        // three possible ways to win vertically in a column
         for (let row = 0; row < 3; row++){
             if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor, tableRow[row+1].children[col].style.backgroundColor,
                 tableRow[row+2].children[col].style.backgroundColor,tableRow[row+3].children[col].style.backgroundColor)){
@@ -102,7 +107,8 @@ verticalCheck = () => {
     }
 };
 
-diagonalCheck = () => {
+diagonalRightCheck = () => {
+    // 4 ways for diagonal
     for(let col = 0; col < 4; col++){
         for (let row = 0; row < 3; row++){
             if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor, tableRow[row+1].children[col+1].style.backgroundColor,
@@ -114,8 +120,8 @@ diagonalCheck = () => {
 
 };
 
-diagonalCheck2 = () => {
-    for(let col = 0; col < 4; col++){
+diagonalLeftCheck = () => {
+    for(let col = 0; col < 4; col++) {
         for (let row = 5; row > 2; row--){
             if (colorMatchCheck(tableRow[row].children[col].style.backgroundColor, tableRow[row-1].children[col+1].style.backgroundColor,
                 tableRow[row-2].children[col+2].style.backgroundColor,tableRow[row-3].children[col+3].style.backgroundColor)){
@@ -127,7 +133,7 @@ diagonalCheck2 = () => {
 
 drawCheck = () => {
     let fullSlot = [];
-    for (i=0; i < tableCell.length; i++){
+    for (let i = 0; i < tableCell.length; i++){
         if (tableCell[i].style.backgroundColor !== 'white'){
             fullSlot.push(tableCell[i]);
         }
