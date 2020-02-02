@@ -12,27 +12,26 @@ const DIAGONAL_COLS = 4;
 const DIAGONAL_RIGHT_WIN = 3;
 
 // text
-const TEXT_COMP = "Computer";
-const TEXT_PLAYER = "Player";
 const TEXT_TIE = "DRAW";
 const TEXT_WIN = "WINS!";
 
-let isVsComputer = false;
-let isVsFriend = false;
 let player1;
 let player2;
 let player1Color;
 let player2Color;
 let currentPlayer = 1;
 
+let gamePlaying = true;
+
 let tableRow = document.getElementsByTagName('tr');
 let tableCell = document.getElementsByTagName('td');
 let slots = document.querySelectorAll('.slot');
 const playerTurn = document.querySelector('.player-turn');
 const resetBtn = document.querySelector('.reset');
+const startGameBtn = document.querySelector('.start-game');
 
-playVsFriend = () => {
-    isVsFriend = true;
+startPlay = () => {
+    startGameBtn.style.display = 'none';
     while (!player1){
         player1 = prompt(`Player One: Enter your name. You will be ${COLOR_PLAYER1}.`);
     }
@@ -45,14 +44,6 @@ playVsFriend = () => {
 
     playerTurn.textContent = `${player1}'s turn!`;
 
-    // Log cell coordinates when clicked
-
-    for (let cell = 0; cell < tableCell.length; cell++){
-        tableCell[cell].addEventListener('click', (e) => {
-            console.log(`${e.target.parentElement.rowIndex},${e.target.cellIndex}`)
-        });
-    }
-
 
 // Functions
 
@@ -63,13 +54,14 @@ playVsFriend = () => {
 
         // check the bottom row first
         for (let i = 5; i > -1; i--) {
-            if (tableRow[i].children[column].style.backgroundColor === COLOR_EMPTY_CELL){
+            if (tableRow[i].children[column].style.backgroundColor === COLOR_EMPTY_CELL && gamePlaying){
                 row.push(tableRow[i].children[column]);
                 if (currentPlayer === 1) {
                     row[0].style.backgroundColor = COLOR_PLAYER1;
                     if (horizontalCheck() || verticalCheck() || diagonalRightCheck() || diagonalLeftCheck()) {
                         playerTurn.textContent = `${player1} ${TEXT_WIN}!!`;
                         playerTurn.style.color = player1Color;
+                        gamePlaying = false;
                         // return alert(`${player1} ${TEXT_WIN}!!`);
                     } else if (drawCheck()) {
                         playerTurn.textContent = TEXT_TIE;
@@ -80,9 +72,10 @@ playVsFriend = () => {
                     }
                 } else {
                     row[0].style.backgroundColor = COLOR_PLAYER2;
-                    if (horizontalCheck() || verticalCheck() || diagonalRightCheck() || diagonalLeftCheck()){
+                    if (horizontalCheck() || verticalCheck() || diagonalRightCheck() || diagonalLeftCheck()) {
                         playerTurn.textContent = `${player2} ${TEXT_WIN}!!`;
                         playerTurn.style.color = player2Color;
+                        gamePlaying = false;
                         // return alert(`${player2} ${TEXT_WIN}!!`);
                     } else if (drawCheck()) {
                         playerTurn.textContent = TEXT_TIE;
@@ -95,6 +88,7 @@ playVsFriend = () => {
                 }
             }
         }
+
     };
 
     Array.prototype.forEach.call(tableCell, (cell) => {
@@ -172,16 +166,33 @@ playVsFriend = () => {
         }
     };
 
+
+    resetBtn.addEventListener('click', () => {
+        slots.forEach(slot => {
+            slot.style.backgroundColor = COLOR_EMPTY_CELL;
+        });
+        playerTurn.style.color = 'black';
+        gamePlaying = true;
+        return (currentPlayer === 1 ? playerTurn.textContent = `${player1}'s turn` : playerTurn.textContent = `${player2}'s turn`);
+    });
+
+
 };
 
 
-resetBtn.addEventListener('click', () => {
-    slots.forEach(slot => {
-        slot.style.backgroundColor = COLOR_EMPTY_CELL;
-    });
-    playerTurn.style.color = 'black';
-    return (currentPlayer === 1 ? playerTurn.textContent = `${player1}'s turn` : playerTurn.textContent = `${player2}'s turn`);
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // play vs computer - minimax algorithm
@@ -191,6 +202,3 @@ resetBtn.addEventListener('click', () => {
 // call the minimax function on each available spot (recursion)
 // evaluate returning values from function calls  and return the best value
 
-playVsComputer = () => {
-    isVsComputer = true
-};

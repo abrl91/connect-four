@@ -1,21 +1,24 @@
 *{
     padding: 0;
     box-sizing: border-box;
-    text-align: center;
-    margin-top: 0.5rem;
 }
 
-h1{
+body {
+    background-image: url("game-bg.jpg");
+    background-size: cover;
+}
+
+h1 {
     font-size: 3rem;
     color: #ffffff;
 }
 
-h3{
+.player-turn{
     font-size: 2rem;
-    margin-bottom: 15px;
+    height: 30px;
 }
 
-a{
+a {
     position: absolute;
     top:6rem;
     font-size: 2rem;
@@ -26,13 +29,6 @@ a{
 
 a:hover{
     opacity: 0.7;
-}
-
-
-
-body {
-    background-image: url("game-bg.jpg");
-    background-size: cover;
 }
 
 .game-container {
@@ -71,18 +67,6 @@ body {
     transition: .5s;
     border-radius: 5px;
 }
-
-.bts-wrapper button {
-    background: #ffffff;
-    color: #000000;
-    margin: 5px;
-}
-
-.bts-wrapper button:hover {
-    transition: 0.8s;
-    border: 2px solid #000000;
-}
-
 
 .reset{
     margin-top: 20px;
